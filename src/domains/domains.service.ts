@@ -187,7 +187,7 @@ export class DomainsService {
 
 
 
-
+    //check activity
     activity(domain : string){
         const options = {
             method: 'GET',
@@ -200,7 +200,7 @@ export class DomainsService {
         return axios.request(options).then(function(response){
             console.log(response.data);
             if(response.data.data.ns_status === false){
-                return "domain is not activated";
+                return "domain is not active";
             }else{
                 return "domain is activated";
             }
@@ -211,6 +211,61 @@ export class DomainsService {
             
         });
     }
+
+
+    // Set a custom record for using CNAME Setup
+    //this option need Enterprise plan of arvan
+    cnameSetup(domain : string,data : any){
+        const options = {
+            method: 'PUT',
+            url : `https://napi.arvancloud.com/cdn/4.0/domains/${domain}/cname-setup/custom`,
+            data:{
+                "address": data.address,
+            },
+            headers:{
+                Authorization : 'Apikey 00eab9db-87ba-5f0f-a2df-3295774a913c'
+            }
+        };
+
+        return axios.request(options).then(function(response){
+            console.log(response.data);
+            return response.data;
+            
+        }).catch(function(reason: AxiosError){                
+            
+            return reason.response.data;
+            
+        });
+        
+    }
+
+
+    //Reset the custom record of CNAME Setup to the default value
+    //this option need Enterprise plan of arvan
+    resetCnameSetup(domain){
+    
+        const options = {
+            method: 'DELETE',
+            url : `https://napi.arvancloud.com/cdn/4.0/domains/${domain}/cname-setup/custom`,
+            headers:{
+                Authorization : 'Apikey 00eab9db-87ba-5f0f-a2df-3295774a913c'
+            }
+        };
+
+        return axios.request(options).then(function(response){
+            console.log("cname setup reset");
+            return "cname setup reset";
+
+        }).catch(function(error){
+            console.log(error);
+            return error;
+            
+        });
+        
+    }
+
+
+
     
 
 }

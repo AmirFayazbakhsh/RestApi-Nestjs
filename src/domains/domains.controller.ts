@@ -55,4 +55,24 @@ isActive(@Param('domain') domain : string){
     return this.domains.activity(domain);
 }
 
+
+// CNAME Setup
+@Put('cname-setup/:domain')
+cnameSetup(@Param('domain') domain : string , @Body() data : any){
+    return this.domains.cnameSetup(domain,data);
+}
+
+
+
+//Reset the custom record of CNAME Setup to the default value
+@Delete('reset-cname-setup/:domain')
+resetCnameSetup(@Param('domain') domain : string){
+    return this.domains.resetCnameSetup(domain);
+
+}
+
+
+
+
+
 }
