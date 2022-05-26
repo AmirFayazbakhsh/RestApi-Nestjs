@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 export class DomainsService {
   constructor(private httpService: HttpService) {}
 
+    //getAll
     findAll(){
         const options = {
             method: 'GET',
@@ -30,9 +31,7 @@ export class DomainsService {
         
     }
 
-
-
-    //find one domain
+    //get data by domain
     findOne(domain){
 
         const options = {
@@ -55,7 +54,7 @@ export class DomainsService {
 
     }
 
-
+    // add domain 
     add(data : any){
 
             const options = {
@@ -96,7 +95,7 @@ export class DomainsService {
     }
 
 
-
+    //delete domain
     async delete(domain){
 
         const data = await this.findOne(domain);
@@ -126,6 +125,91 @@ export class DomainsService {
             
         });
         
+    }
+
+
+    // Set custom NS records for the domain
+    // this option need Professional plan of arvan
+    update(domain : string ,nsKeys : any){
+
+        const options = {
+            method: 'PUT',
+            url : `https://napi.arvancloud.com/cdn/4.0/domains/${domain}/ns-keys`,
+            data:{
+                "ns_keys": [nsKeys.ns_keys[0],nsKeys.ns_keys[1]]
+            },
+            headers:{
+                Authorization : 'Apikey 00eab9db-87ba-5f0f-a2df-3295774a913c'
+            }
+        };
+
+        return axios.request(options).then(function(response){
+            console.log(response.data);
+            return "Domain updated successfully";
+            
+        }).catch(function(reason: AxiosError){                
+            
+            return reason.response.data;
+            
+        });
+
+    }
+
+
+    // async resetDomain(domain){
+
+    //     const data = await this.findOne(domain);
+    
+    //     const options = {
+    //         method: 'DELETE',
+    //         url : `https://napi.arvancloud.com/cdn/4.0/domains/${domain}`,
+    //         data:{
+    //             "id": data['id'],
+    //         },
+    //         headers:{
+    //             Authorization : 'Apikey 00eab9db-87ba-5f0f-a2df-3295774a913c'
+    //         }
+    //     };
+        
+
+
+    //     return axios.request(options).then(function(response){
+    //         console.log("Domain deleted successfully");
+    //         return "Domain deleted successfully";
+
+    //     }).catch(function(error){
+    //         console.log(error);
+    //         return error;
+            
+    //     });
+        
+    // }
+
+
+
+
+    activity(domain : string){
+        const options = {
+            method: 'GET',
+            url : `https://napi.arvancloud.com/cdn/4.0/domains/${domain}/ns-keys/check`,
+            headers:{
+                Authorization : 'Apikey 00eab9db-87ba-5f0f-a2df-3295774a913c'
+            }
+        };
+
+        return axios.request(options).then(function(response){
+            console.log(response.data);
+            if(response.data.data.ns_status === false){
+                return "domain is not activated";
+            }else{
+                return "domain is activated";
+            }
+            
+        }).catch(function(reason: AxiosError){                
+            
+            return reason.response.data;
+            
+        });
     }
     
 
