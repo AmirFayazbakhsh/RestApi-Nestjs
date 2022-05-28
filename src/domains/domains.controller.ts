@@ -42,9 +42,9 @@ updateNsDomain(@Param('domain') domain : string, @Body() data : any){
 
 
 // Reset custom Nameserver keys to the default values for the domain
-@Delete('reset/:domain')
+@Delete('reset-domain/:domain')
 resetDomain(@Param('domain') domain : string){
-
+    return this.domains.resetDomain(domain);
 }
 
 
@@ -55,8 +55,7 @@ isActive(@Param('domain') domain : string){
     return this.domains.activity(domain);
 }
 
-
-// CNAME Setup
+// Set a custom record for using CNAME Setup
 @Put('cname-setup/:domain')
 cnameSetup(@Param('domain') domain : string , @Body() data : any){
     return this.domains.cnameSetup(domain,data);
@@ -71,6 +70,23 @@ resetCnameSetup(@Param('domain') domain : string){
 
 }
 
+// Convert domain setup to cname
+@Post('convert-to-cname/:domain')
+convertToCname(@Param('domain') domain : string){
+    return this.domains.convertToCname(domain);
+}
+
+
+// Check Cname Setup to find whether domain is activated
+@Get('check-cname-activity/:domain')
+checkCnameForActivity(@Param('domain') domain : string){
+    return this.domains.checkCnameForActivity(domain);
+}
+
+@Post('clone-config/:domain')
+cloneConfig(@Param('domain') domain : string ,@Body() anotherDomain : any){    
+    return this.domains.cloneConfig(domain,anotherDomain.from);
+}
 
 
 
